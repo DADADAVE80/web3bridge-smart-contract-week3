@@ -11,7 +11,7 @@ async function main() {
 
   await message.waitForDeployment();
 
-  console.log(`MyMessage contract deployed to ${message.target}`);
+  console.log(`MyMessage contract ${message} deployed to ${message.target}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
