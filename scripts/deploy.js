@@ -7,7 +7,7 @@
 const hre = require("hardhat");
 
 async function main() {
-    const [deployer] = await ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     console.log("Deploying contracts with the account:", deployer.address);
 
@@ -15,7 +15,7 @@ async function main() {
 
     await message.waitForDeployment();
 
-    console.log(`MyMessage contract ${message} deployed to ${message.target}`);
+    console.log(`MyMessage contract ${message.name} deployed to ${message.target}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
