@@ -4,12 +4,12 @@ pragma solidity ^0.8.9;
 contract MyMessage{
     string public message;
 
-    constructor(string memory initialMessage) {
-        message = initialMessage;
+    constructor(string memory _initialMessage) {
+        message = _initialMessage;
     }
 
-    function setMessage(string memory newMessage) public {
-        message = newMessage;
+    function setMessage(string memory _newMessage) public {
+        message = _newMessage;
     }
 
     function getMessage() public view returns (string memory) {

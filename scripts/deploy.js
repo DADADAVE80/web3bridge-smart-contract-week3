@@ -11,7 +11,7 @@ async function main() {
 
     console.log("Deploying contracts with the account:", deployer.address);
 
-    const message = await hre.ethers.deployContract("MyMessage");
+    const message = await hre.ethers.deployContract("MyMessage", ["Hello World!"]);
 
     await message.waitForDeployment();
 
