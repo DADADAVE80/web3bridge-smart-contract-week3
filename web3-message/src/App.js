@@ -1,53 +1,81 @@
 import {ethers} from 'ethers';
 import './App.css';
 import contractABI from "./abi.json";
+import {useState} from "react";
 
 function App() {
-    const contractAddress = "0x4271d1840F1f5B021A056A9F1C9Ef2e1a510289e";
+    const contractAddress = "0x8468D5dd0e61920C65744b6BC42f2D13D37fD759";
 
     async function requestAccount() {
         await window.ethereum.request({method: 'eth_requestAccounts'});
     }
 
-    async function setMessage() {
-        if (typeof window.ethereum !== 'undefined') {
+    const [inputMessage, setInputMessage] = useState('');
+    const [outputMessage, setOutputMessage] = useState('');// Renamed state variable
+
+    const handleMessageChange = (e) => {
+        setInputMessage(e.target.value);
+    }
+
+    async function sendMessageToContract() { // Renamed function
+        if (typeof window.ethereum !== 'undefined' && window.ethereum.isConnected()) {
             await requestAccount();
-            await window.ethereum.enable();
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-            const transaction = await contract.setMessage("Hello World!");
-            await transaction.wait();
-            console.log('Message set!');
+            try {
+                const transaction = await contract.setMessage(inputMessage);
+                await transaction.wait();
+                // const message = await contract.getMessage();
+                console.log(`Message set`);
+                setInputMessage('');
+            } catch (err) {
+                console.error('Error:', err);
+            }
         }
     }
 
-    async function getMessage() {
-        if (typeof window.ethereum !== 'undefined') {
+    async function getMessageFromContract() {
+        if (typeof window.ethereum !== 'undefined' && window.ethereum.isConnected()) {
             await requestAccount();
-            await window.ethereum.enable();
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-            const data = await contract.getMessage();
-            console.log('Message retrieved!', data);
+            try {
+                const message = await contract.getMessage();
+                console.log('Message retrieved');
+                setOutputMessage(message);
+            } catch (err) {
+                console.error('Error:', err);
+            }
         }
     }
 
-    return (
-        <div className="App">
-            <header className="App-header">
-                <div>
-                    <button onClick={setMessage}>Set Message</button>
-                </div>
-                <div>
-                    <button onClick={getMessage}>Get Message</button>
-                </div>
-            </header>
+    return (<div className="container">
+        <header className="header">
+            <h1>Ethereum Message App</h1>
+        </header>
+        <div className="input-container">
+            <input
+                className="input"
+                type="text"
+                value={inputMessage}
+                onChange={handleMessageChange}
+                placeholder="Enter your message"
+            />
+            <button className="button" onClick={sendMessageToContract}>
+                Set Message
+            </button>
         </div>
-    );
+        <button className="button" onClick={getMessageFromContract}>
+            Get Message
+        </button>
+        <div className="output-container">
+            <p>{outputMessage}</p>
+        </div>
+    </div>);
 }
 
 export default App;
