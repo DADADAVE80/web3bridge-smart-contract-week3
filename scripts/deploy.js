@@ -7,16 +7,20 @@
 const hre = require("hardhat");
 
 async function main() {
-  const message = await hre.ethers.deployContract("MyMessage");
+    const [deployer] = await ethers.getSigners();
 
-  await message.waitForDeployment();
+    console.log("Deploying contracts with the account:", deployer.address);
 
-  console.log(`MyMessage contract ${message} deployed to ${message.target}`);
+    const message = await hre.ethers.deployContract("MyMessage");
+
+    await message.waitForDeployment();
+
+    console.log(`MyMessage contract ${message} deployed to ${message.target}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+    console.error(error);
+    process.exitCode = 1;
 });

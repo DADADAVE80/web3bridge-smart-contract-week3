@@ -10,10 +10,10 @@ module.exports = {
       accounts: [process.env.pvky],
     },
   },
-  // etherscan: {
-  //   apiKey: process.env.etherscanApiKey,
-  // },
-  // sourcify: {
-  //   enabled: true
-  // }
+  etherscan: {
+    apiKey: process.env.etherscanApiKey,
+  },
+  sourcify: {
+    enabled: true
+  }
 };
